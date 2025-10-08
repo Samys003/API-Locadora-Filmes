@@ -15,7 +15,11 @@ create table tbl_filme(
 
 insert into tbl_filme ( nome, sinopse, data_lancamento, duracao, orcamento, trailer, capa )
 values('10 Coisas que Eu Odeio em Você', 
-       'A situação está tensa na casa dos Stratford. Bianca (Larisa Oleynik) não vê a hora de arranjar um namorado, mas seu pai (Larry Miller) não permite que ela saia com garotos. Após muita insistência, o pai toma uma resolução: Bianca pode namorar, desde que sua irmã, Katharina (Julia Stiles), namore também. Só que Katharina é uma verdadeira megera, que não tem amigos na escola nem em lugar algum. Para resolver a questão, Cameron (Joseph Gordon-Levitt), apaixonado por Bianca, resolve contratar o misterioso Patrick Verona (Heath Ledger) para seduzir a futura cunhada.',
+      'A situação está tensa na casa dos Stratford. Bianca 
+      (Larisa Oleynik) não vê a hora de arranjar um namorado, mas seu pai (Larry Miller) não permite que ela saia com garotos.
+      Após muita insistência, o pai toma uma resolução: Bianca pode namorar, desde que sua irmã, Katharina (Julia Stiles), namore também.
+      Só que Katharina é uma verdadeira megera, que não tem amigos na escola nem em lugar algum. Para resolver a questão, Cameron 
+      (Joseph Gordon-Levitt), apaixonado por Bianca, resolve contratar o misterioso Patrick Verona (Heath Ledger) para seduzir a futura cunhada.',
        '1999-08-06',
        '1:37',
        '130000000',

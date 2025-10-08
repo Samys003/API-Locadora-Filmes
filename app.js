@@ -43,7 +43,9 @@ app.use((request, response, next)=>{
 const controllerFilme = require('./controller/filme/controller_filme.js')
 
 //EndPorints para a rota de filme
-app.get('v1/locadora/filme', cors(), async function (request, response) {
+
+app.get('/v1/locadora/filme', cors(), async function (request, response) {
+    
     
     let filme = await controllerFilme.listarFilmes()
 
