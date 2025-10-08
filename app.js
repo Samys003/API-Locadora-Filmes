@@ -55,6 +55,19 @@ app.get('/v1/locadora/filme', cors(), async function (request, response) {
     
 })
 
+//:id esta sendo passado como parametro
+app.get('/v1/locadora/filme/:id', cors(), async function (request, response) {
+    let idfilme = request.params.id
+    
+    //recebe o ID encaminhado via parametro na requisição
+    let filme = await controllerFilme.buscarFilmeId(idfilme)
+
+    response.status(filme.status_code)
+    response.json(filme)
+
+    
+})
+
 app.listen(PORT, function(){
     console.log('API aguardando requisições...')
 })
