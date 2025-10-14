@@ -57,7 +57,23 @@ const ERROR_REQUIRED_FIELDS = {
                                     message: 'Não foi possivel processar a requisição, pois existem campos obrigatorios que devem ser encaminhados e atendidos conforme a documentação!' 
                                 }
 
+const ERROR_CONTENT_TYPE    = {
+                                    status: false,
+                                    status_code: 415,
+                                    message: 'Não foi possivel processar a requisição, pois o tipo de dados enviado deve ser JSON!' 
+}
 
+const SUCESS_REQUEST        = {
+                                    status: true, 
+                                    status_code: 415, 
+                                    message: 'requisição bem sucedida!!!'
+
+}
+const SUCESS_CREATED_ITEM  = {
+                                    status: true, 
+                                    status_code: 200, 
+                                    message: 'item criado com sucesso!!!'  
+}
 
 
 module.exports = {
@@ -66,5 +82,8 @@ module.exports = {
     ERROR_NOT_FOUND,
     ERROR_INTERNAL_SERVER_CONTROLLER,
     ERROR_INTERNAL_SERVER_MODEL,
-    ERROR_REQUIRED_FIELDS
+    ERROR_REQUIRED_FIELDS,
+    SUCESS_REQUEST,
+    SUCESS_CREATED_ITEM,
+    ERROR_CONTENT_TYPE
 }

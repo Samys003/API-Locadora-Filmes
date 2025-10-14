@@ -31,81 +31,107 @@ exemplos de dependencias para conexão com o banco de dados
 */
 
 //Import da dependencia do Prisma que permite a execução de script SQL no BD
-const {PrismaClient} = require('../../generated/prisma')
+const { PrismaClient } = require('../../generated/prisma')
 
 // Cria um novo objeto, baseado na classe do PrismaClient
 const prisma = new PrismaClient()
 
 
 // função que retorna uma lista de todos os filmes do banco de dados
-const getSelectAllMovies = async function(){
+const getSelectAllMovies = async function () {
     try {
 
         //criando o comando para ser utilizado no sql, selecionando todos os filmes pelo id em ordem decrescente
         let sql = `select * from tbl_filme order by id desc`
 
         //encaminha para o bd o script sql
-        let result = await prisma.$queryRawUnsafe(sql) 
+        let result = await prisma.$queryRawUnsafe(sql)
 
 
-        if(Array.isArray(result))
+        if (Array.isArray(result))
             return result
         else
-             return false
-        
+            return false
+
 
     } catch (error) {
-        
+
         return false
-    
+
     }
 
-   
+
 }
 
 // função que retorna um filme atraves do id
-const getSelectByIdMovies = async function(id){
+const getSelectByIdMovies = async function (id) {
     try {
 
         //criando o comando para ser utilizado no sql, selecionando todos os filmes pelo id em ordem decrescente
         let sql = `select * from tbl_filme where id=${id}`
 
         //encaminha para o bd o script sql
-        let result = await prisma.$queryRawUnsafe(sql) 
+        let result = await prisma.$queryRawUnsafe(sql)
 
 
-        if(Array.isArray(result))
+        if (Array.isArray(result))
             return result
         else
-             return false
-        
+            return false
+
 
     } catch (error) {
-        
+
         return false
-    
+
     }
 
 }
 
 // insere um filme novo no banco de dados
-const setInsertMovies = async function(){
+const setInsertMovies = async function (filme) {
+    try {
+        let sql = `insert into tbl_filme (nome, 
+                                    sinopse, 
+                                    data_lancamento, 
+                                    duracao,
+                                    orcamento,
+                                    trailer,
+                                    capa)
+                            values( '${filme.nome}',
+                                    '${filme.sinopse}',
+                                    '${filme.data_lancamento}',
+                                    '${filme.duracao}',
+                                    '${filme.orcamento}',
+                                    '${filme.trailer}', 
+                                    '${filme.capa}');`
+        // executerawusanfe() -> executa o script sql que não tem retorno de valores
+        let result = await prisma.$executeRawUnsafe(sql)
+    } catch (error) {
+        return false
+    }
+
+    if (result)
+        return true
+    else
+        return false
 
 }
 
 // altera um filme no banco de dados
-const setUpdateMovies = async function(id){
+const setUpdateMovies = async function (id) {
 
 }
 
 
-const setDeleteMovies = async function (id){
-    
+const setDeleteMovies = async function (id) {
+
 }
 
 
 module.exports = {
     getSelectAllMovies,
-    getSelectByIdMovies
+    getSelectByIdMovies,
+    setInsertMovies
 
 }

@@ -14,6 +14,9 @@ const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 
+//Cria um objeto especialista no formato json, para receber dados via POST e PUT
+const bodyParserJson = bodyParser.json()
+
 
 
 // ultilizara a porta enviada do servidor ou (||) ultilizara a porta local
@@ -44,6 +47,7 @@ const controllerFilme = require('./controller/filme/controller_filme.js')
 
 //EndPorints para a rota de filme
 
+//retorna todos os filmes
 app.get('/v1/locadora/filme', cors(), async function (request, response) {
     
     
@@ -55,7 +59,7 @@ app.get('/v1/locadora/filme', cors(), async function (request, response) {
     
 })
 
-//:id esta sendo passado como parametro
+//:id esta sendo passado como parametro // retorna todos os filmes
 app.get('/v1/locadora/filme/:id', cors(), async function (request, response) {
     let idfilme = request.params.id
     
@@ -68,8 +72,27 @@ app.get('/v1/locadora/filme/:id', cors(), async function (request, response) {
     
 })
 
+app.post('/v1/locadora/filme', cors(), bodyParserJson, async function(request, response) {
+    //Recebe os dados do body da requisição (Se você utilizar o bodyParser, é obrigatorio ter no endpoint)
+    let dadosBody = request.body
+
+    //recebe o tipo de dados da requisição (JSON ou XML ou...)
+    let contentType = request.headers['content-type']
+   
+    //chama a função da controler para inserir o novo filme, encaminha os dados e o content-type
+    let filme = await controllerFilme.inserirFilme(dadosBody, contentType)
+
+    response.status(filme.status_code)
+
+
+    response.json(filme)
+
+
+
+})
+
 app.listen(PORT, function(){
-    console.log('API aguardando requisições...')
+    console.log('API aguardando requisições... http://localhost:8080/v1/locadora/filme')
 })
 
 
