@@ -32,6 +32,24 @@ const SUCCESS_REQUEST = {
                                     message: 'Requisição bem sucedida!'
                                 }
 
+const SUCESS_REQUEST        = {
+                                    status: true, 
+                                    status_code: 415, 
+                                    message: 'requisição bem sucedida!!!'
+
+}
+const SUCESS_CREATED_ITEM  = {
+                                    status: true, 
+                                    status_code: 201, 
+                                    message: 'item criado com sucesso!!!'  
+}
+
+const SUCESS_UPDATED_ITEM ={
+                                    status: true, 
+                                    status_code: 200, 
+                                    message: 'item atualizado com sucesso!!!'  
+}
+
 /***********************************MENSAGENS DE ERRO******************************************************************/
 const ERROR_NOT_FOUND = {
                                     status: false, 
@@ -63,17 +81,6 @@ const ERROR_CONTENT_TYPE    = {
                                     message: 'Não foi possivel processar a requisição, pois o tipo de dados enviado deve ser JSON!' 
 }
 
-const SUCESS_REQUEST        = {
-                                    status: true, 
-                                    status_code: 415, 
-                                    message: 'requisição bem sucedida!!!'
-
-}
-const SUCESS_CREATED_ITEM  = {
-                                    status: true, 
-                                    status_code: 200, 
-                                    message: 'item criado com sucesso!!!'  
-}
 
 
 module.exports = {
@@ -85,5 +92,6 @@ module.exports = {
     ERROR_REQUIRED_FIELDS,
     SUCESS_REQUEST,
     SUCESS_CREATED_ITEM,
-    ERROR_CONTENT_TYPE
+    ERROR_CONTENT_TYPE,
+    SUCESS_UPDATED_ITEM
 }
