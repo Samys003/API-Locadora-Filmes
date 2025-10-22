@@ -17,11 +17,13 @@ const filmeDAO = require('../../model/DAO/filme.js')
 //import do aquivo de mensagens
 const DEFAULT_MESSAGES = require('../modulo/config_messages.js')
 
+// garantir que a mensagem seja uma string
 let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
 //retorna uma lista de todos os filmes
 const listarFilmes = async function () {
     try {
+
         //Chama a função do DAO para retornar a lista de filmes do BD
         let resultFilmes = await filmeDAO.getSelectAllMovies()
         // console.log(resultFilmes)
@@ -100,15 +102,24 @@ const inserirFilme = async function (filme, contentType) {
                 let resultFilmes = await filmeDAO.setInsertMovies(filme)
 
                 if (resultFilmes) {
+                    let lastId = await filmeDAO.getSelectLastId()
+
+                    if(lastId){
+
+                        filme.id = lastId
+
                     MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCESS_CREATED_ITEM.status
                     MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCESS_CREATED_ITEM.status_code
                     MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCESS_CREATED_ITEM.message
 
                     return MESSAGES.DEFAULT_HEADER // 201
-
+                    
                 } else {
                     return MESSAGES.ERROR_INTERNAL_SERVER_MODEL // 500
                 }
+            }else{
+                return MESSAGES.ERROR_INTERNAL_SERVER_MODEL // 500
+            }
             } else {
                 return validar // 400
             }
@@ -137,15 +148,15 @@ const atualizarFilme = async function (filme, id, contentType) {
 
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
 
-                if (!validar) {
+            if (!validar) {
 
-                     //validação de ID valido, chama a função controller que verifica se o id existe no bd
-                    let validarID = await buscarFilmeId(id)
+                //validação de ID valido, chama a função controller que verifica se o id existe no bd
+                let validarID = await buscarFilmeId(id)
 
-                    if(validarID.status_code == 200){
+                if (validarID.status_code == 200) {
 
                     //Adiciona o filme no json de dados, para ser encaminhado ao DAO
-                    filme.id = Number(id)    
+                    filme.id = Number(id)
 
                     let resultFilmes = await filmeDAO.setUpdateMovies(filme)
 
@@ -153,25 +164,30 @@ const atualizarFilme = async function (filme, id, contentType) {
                         MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCESS_UPDATED_ITEM.status
                         MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCESS_UPDATED_ITEM.status_code
                         MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCESS_UPDATED_ITEM.message
-                        MESSAGES.DEFAULT_HEADER.itens.filme  = filme
+                        MESSAGES.DEFAULT_HEADER.itens.filme = filme
 
                         return MESSAGES.DEFAULT_HEADER // 200
 
                     } else {
+
                         return MESSAGES.ERROR_INTERNAL_SERVER_MODEL // 500
-                   }
-                }else{
+                    }
+
+                } else {
+
                     return validarID // a função buscarfilmeID podera retornar (400 ou 404 ou 500)
                 }
-                } else {
-                    return validar // 400 referente a validação do dados
-                }
+
             } else {
+
+                return validar // 400 referente a validação do dados
+            }
+
+        } else {
             return MESSAGES.ERROR_CONTENT_TYPE //415
         }
-    
+
     } catch (error) {
-        console.log(error)
         return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 
@@ -180,7 +196,7 @@ const atualizarFilme = async function (filme, id, contentType) {
 
 //exclui um filme buscando pelo ID
 const excluirFilme = async function (id) {
-
+    console.log(id)
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
     try {
@@ -197,7 +213,7 @@ const excluirFilme = async function (id) {
                     return MESSAGES.DEFAULT_HEADER //200
 
                 } else {
-                    return MESSAGES.ERROR_NOT_FOUND //404
+                    return MESSAGES.SUCCESS_REQUEST //404
                 }
             } else {
                 return MESSAGES.ERROR_INTERNAL_SERVER_MODEL // 500
@@ -209,6 +225,7 @@ const excluirFilme = async function (id) {
         }
 
     } catch (error) {
+        console.log(error)
         return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER // 500
     }
 
@@ -252,6 +269,7 @@ const validarDadosFilme = async function (filme) {
         return false
     }
 }
+
 
 
 

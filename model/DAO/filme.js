@@ -154,7 +154,7 @@ const setUpdateMovies = async function (filme) {
 const setDeleteMovies = async function (id) {
     try{
 
-        let sql =`delete * from tbl_filme where id=${id}`
+        let sql =`delete from tbl_filme where id=${id}`
 
         let result = await prisma.$executeRawUnsafe(sql)   
         
@@ -169,12 +169,33 @@ const setDeleteMovies = async function (id) {
 
 }
 
+const getSelectLastId = async function (){
+    try {
+    
+        let sql = `select id from tbl_filme order by id desc limit 1`
+
+        let result = await prisma.$queryRawUnsafe(sql)
+
+        if(Array.isArray(result)){
+            return Number(result[0].id)
+        } else{
+            return false
+        }
+        
+    } catch (error) {
+        return false
+    }
+    
+}
+
+
+
 
 module.exports = {
     getSelectAllMovies,
     getSelectByIdMovies,
     setInsertMovies,
     setUpdateMovies,
-    setDeleteMovies
-
+    setDeleteMovies, 
+    getSelectLastId
 }

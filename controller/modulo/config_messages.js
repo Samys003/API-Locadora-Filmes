@@ -65,7 +65,7 @@ const ERROR_INTERNAL_SERVER_CONTROLLER = {
 
 const ERROR_INTERNAL_SERVER_MODEL = {
                                     status: false, 
-                                    status_code: 404,
+                                    status_code: 500,
                                     message: 'Não foi possivel processar a requisição devido a erros internos no servidor (MODELAGEM DE DADOS)!'
                                 }
 
@@ -84,6 +84,7 @@ const ERROR_CONTENT_TYPE    = {
 
 
 module.exports = {
+
     DEFAULT_HEADER,
     SUCCESS_REQUEST,
     ERROR_NOT_FOUND,
@@ -94,4 +95,5 @@ module.exports = {
     SUCESS_CREATED_ITEM,
     ERROR_CONTENT_TYPE,
     SUCESS_UPDATED_ITEM
+    
 }

@@ -1,5 +1,5 @@
 /************************************************************************
- * Objetivo: arquivo responsável por padroes  de mensagens que o projeto irá realizar sempre no formato json (mensagens de erro e sucesso, etc)
+ * Objetivo: arquivo responsável por padroes  rotas que o projeto irá realizar (put, get, post, delete)
  * 
  * Data: 07/10/2025
  * 
@@ -12,6 +12,7 @@
 
 const express = require('express')
 const cors = require('cors')
+//
 const bodyParser = require('body-parser')
 
 //Cria um objeto especialista no formato json, para receber dados via POST e PUT
@@ -44,6 +45,7 @@ app.use((request, response, next)=>{
 
 //Import das controllers
 const controllerFilme = require('./controller/filme/controller_filme.js')
+const  controllerGenero  = require('./controller/genero/controller_genero.js')
 
 //EndPorints para a rota de filme
 
@@ -110,15 +112,24 @@ app.put( '/v1/locadora/filme/:id', cors(), bodyParserJson, async function (reque
     response.json(filme)
 })
 
-app.delete('/v1/locadora/filme/:id', cors, bodyParserJson, async function (request, response) {
+app.delete('/v1/locadora/filme/:id', cors(), async function (request, response) {
 
     let idFilme = request.params.id
 
-    let dadosBody = request.body
+    let filme = await controllerFilme.excluirFilme(idFilme)
 
-    let contentType = request.headers['content-type']
+    response.status(filme.status_code)
+    response.json(filme)
+    
+})
 
-    let filme = await controllerFilme.excluirFilme(dadosBody, idFilme, contentType)
+
+app.get('/v1/locadora/genero', cors(), async function (request, response) {
+
+    let genero = await controllerGenero.listarGeneros()
+
+    response.status(genero.status_code)
+    response.json(genero)
     
 })
 
