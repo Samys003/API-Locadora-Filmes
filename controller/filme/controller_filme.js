@@ -129,7 +129,6 @@ const inserirFilme = async function (filme, contentType) {
         }
 
     } catch (error) {
-        console.log(error)
         return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 

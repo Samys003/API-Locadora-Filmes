@@ -142,7 +142,6 @@ const setUpdateMovies = async function (filme) {
         else
             return false
     } catch (error) {
-        console.log(error)
         return false
     }
 
@@ -187,6 +186,7 @@ const getSelectLastId = async function (){
     }
     
 }
+
 
 
 

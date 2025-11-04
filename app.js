@@ -61,7 +61,7 @@ app.get('/v1/locadora/filme', cors(), async function (request, response) {
     
 })
 
-//:id esta sendo passado como parametro // retorna todos os filmes
+//:id esta sendo passado como parametro // 
 app.get('/v1/locadora/filme/:id', cors(), async function (request, response) {
     let idfilme = request.params.id
     
@@ -74,6 +74,7 @@ app.get('/v1/locadora/filme/:id', cors(), async function (request, response) {
     
 })
 
+// Insere filmes na tabela
 app.post('/v1/locadora/filme', cors(), bodyParserJson, async function(request, response) {
     //Recebe os dados do body da requisição (Se você utilizar o bodyParser, é obrigatorio ter no endpoint)
     let dadosBody = request.body
@@ -124,15 +125,43 @@ app.delete('/v1/locadora/filme/:id', cors(), async function (request, response) 
 })
 
 
+//exibe todos os generos
 app.get('/v1/locadora/genero', cors(), async function (request, response) {
 
     let genero = await controllerGenero.listarGeneros()
+
+    
+    
+    response.status(genero.status_code)
+    response.json(genero)
+    
+})
+
+// buscar genero via ID
+app.get('/v1/locadora/genero/:id', cors(), async function (request, response) {
+    
+    let idGenero = request.params.id
+
+    let genero = await controllerGenero.buscarGeneroId(idGenero)
 
     response.status(genero.status_code)
     response.json(genero)
     
 })
 
+app.post('/v1/locadora/genero', cors(), bodyParserJson, async function (request, response) {
+    
+    let dadosBody = request.body
+
+    let contentType = request.headers['content-type']
+
+    let genero = await controllerGenero.inserirGenero(dadosBody, contentType)
+
+    console.log(genero)
+    response.status(genero.status_code)
+    response.json(genero)
+    
+})
 
 
 app.listen(PORT, function(){

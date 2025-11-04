@@ -16,22 +16,22 @@ const { PrismaClient } = require('../../generated/prisma')
 const prisma = new PrismaClient()
 
 // função que exibe todos os generos
-const getSelectAllGenrres = async function() {
+const getSelectAllGenrres = async function () {
 
     try {
         let sql = `select * from tbl_genero order by id desc`
 
         let result = await prisma.$queryRawUnsafe(sql)
 
-        if(Array.isArray(result))
+        if (Array.isArray(result))
             return result
         else
             return false
-        
+
     } catch (error) {
         console.log(error)
         return false
-    }    
+    }
 
 
 }
@@ -48,17 +48,74 @@ const getSelectGenrresId = async function (id) {
         else
             return false
 
-        } catch (error) {
-            return false         
+    } catch (error) {
+        return false
     }
 }
 
+const getSelectLastId = async function () {
+    try {
 
+        let sql = `select id from tbl_filme order by id desc limit 1`
 
+        let result = await prisma.$queryRawUnsafe(sql)
+
+        if (Array.isArray(result)) {
+            return Number(result[0].id)
+        } else {
+            return false
+        }
+
+    } catch (error) {
+        return false
+    }
+
+}
+
+const setInsertGenrrers = async function (genero) {
+    try {
+        let sql = `insert into tbl_genero (nome_genero)
+                values ('${genero.nome_genero}');`
+
+        let result = await prisma.$executeRawUnsafe(sql)
+
+        if (result)
+            return true
+        else
+            return false
+
+    } catch (error) {
+
+        return false
+    }
+
+}
+
+const setUpdatedGenner = async function (genero) {
+    try {
+        let sql = `update tbl_genero set 
+                                    nome_genero          =  '${genero.nome_genero}'
+                                    
+                                    where id = ${genero.nome_genero}`
+
+        let result = await prisma.$executeRawUnsafe(sql)
+
+        if (result)
+            return true
+        else
+            return false
+    } catch (error) {
+            return false
+    }
+
+}
 
 
 module.exports = {
     getSelectAllGenrres,
-    getSelectGenrresId
+    getSelectGenrresId,
+    setInsertGenrrers,
+    getSelectLastId,
+    setUpdatedGenner
 
 }
