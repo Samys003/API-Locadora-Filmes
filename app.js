@@ -163,6 +163,20 @@ app.post('/v1/locadora/genero', cors(), bodyParserJson, async function (request,
     
 })
 
+app.put('/v1/locadora/genero/:id' , cors(), bodyParserJson, async function (request, response) {
+    let idGenero = request.params.id
+
+    let dadosBody = request.body
+
+    let contentType = request.headers['content-type']
+
+    let genero = await controllerGenero.atualizarGenero(dadosBody, idGenero, contentType)
+
+    response.status(genero.status_code)
+    response.json(genero)
+
+})
+
 
 app.listen(PORT, function(){
     console.log('API aguardando requisições... http://localhost:8080/v1/locadora/filme')
