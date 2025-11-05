@@ -178,6 +178,7 @@ app.put('/v1/locadora/genero/:id' , cors(), bodyParserJson, async function (requ
 })
 
 
+
 app.listen(PORT, function(){
     console.log('API aguardando requisições... http://localhost:8080/v1/locadora/filme')
 })

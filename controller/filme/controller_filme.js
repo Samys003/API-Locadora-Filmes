@@ -5,14 +5,18 @@
  * 
  * Autor: Samara Santos
  * 
- * Versão: 1.0
- * 
+ * Versão: 1.0 (CRUD basico do filme, sem as relações com outras tabelas)
+ *
+ * Versão: 1.1 (CRUD com relacionamento com a tabela genero)
+ *  
  * ************************************************************ 
 */
 
 //import da model do DAO do filme
 const { json } = require('body-parser')
 const filmeDAO = require('../../model/DAO/filme.js')
+const filmeGeneroDao = require ('../../model/DAO/filme_genero.js')
+const controllerFilmeGenero = require ('./controller_filme_genero.js')
 
 //import do aquivo de mensagens
 const DEFAULT_MESSAGES = require('../modulo/config_messages.js')
@@ -105,6 +109,14 @@ const inserirFilme = async function (filme, contentType) {
                     let lastId = await filmeDAO.getSelectLastId()
 
                     if(lastId){
+
+                        //processar a inserção dos dados na tabela de relação
+                        // entre filme e genero
+
+                        filme.genero.forEach(async function(genero){
+                            let filmeGenero = {id_filme: lastId, id_genero: genero.id}
+                            let resultFilmesGeneros = await controllerFilmeGenero.inserirFilmeGenero(filmeGenero)
+                        });
 
                         filme.id = lastId
 
@@ -268,6 +280,8 @@ const validarDadosFilme = async function (filme) {
         return false
     }
 }
+
+
 
 
 
