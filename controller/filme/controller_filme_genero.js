@@ -34,10 +34,10 @@ const listarFilmesGeneros = async function () {
 
         if (resultFilmesGeneros) {
             if (resultFilmesGeneros.length > 0) {
-
+                console.log(MESSAGES.DEFAULT_HEADER)
                 MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
                 MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
-                MESSAGES.DEFAULT_HEADER.items.filmes_generos = resultFilmesGeneros
+                MESSAGES.DEFAULT_HEADER.itens.filmes_generos = resultFilmesGeneros
 
                 return MESSAGES.DEFAULT_HEADER //200
             } else {
@@ -48,6 +48,7 @@ const listarFilmesGeneros = async function () {
         }
 
     } catch (error) {
+        console.log(error)
         return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER // 500 
     }
 
@@ -99,10 +100,10 @@ const listarGenerosIdFilme = async function (idfilme) {
             let resultFilmesGeneros = await filmeGeneroDAO.getSelectGenresByIdMovies(Number(idfilme))
 
             if (resultFilmesGeneros) {
-                if (resultFilmes.length > 0) {
+                if (resultFilmesGeneros.length > 0) {
                     MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
                     MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
-                    MESSAGES.DEFAULT_HEADER.itens.filme_genero = resultFilmesGeneros
+                    MESSAGES.DEFAULT_HEADER.itens.filmes_generos = resultFilmesGeneros
 
                     return MESSAGES.DEFAULT_HEADER //200
 
@@ -119,6 +120,7 @@ const listarGenerosIdFilme = async function (idfilme) {
         }
 
     } catch (error) {
+        console.log(error)
         return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER // 500
     }
 }
@@ -153,6 +155,7 @@ const listarFilmesIdGenero = async function (idGenero) {
         }
 
     } catch (error) {
+        
         return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER // 500
     }
 }

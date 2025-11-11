@@ -80,7 +80,11 @@ const ERROR_CONTENT_TYPE    = {
                                     status_code: 415,
                                     message: 'Não foi possivel processar a requisição, pois o tipo de dados enviado deve ser JSON!' 
 }
-
+const ERROR_RELATIONAL_INSERTION = {
+                                    status: false,
+                                    status_code: 500,
+                                    message: 'A requisição do item principal foi processada com sucesso, porém houveram problemas ao inserir dados na tabela de relação !!!' 
+}
 
 
 module.exports = {
@@ -94,6 +98,7 @@ module.exports = {
     SUCESS_REQUEST,
     SUCESS_CREATED_ITEM,
     ERROR_CONTENT_TYPE,
-    SUCESS_UPDATED_ITEM
+    SUCESS_UPDATED_ITEM,
+    ERROR_RELATIONAL_INSERTION
     
 }

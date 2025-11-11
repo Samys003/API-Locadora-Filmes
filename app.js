@@ -163,6 +163,8 @@ app.post('/v1/locadora/genero', cors(), bodyParserJson, async function (request,
     
 })
 
+
+
 app.put('/v1/locadora/genero/:id' , cors(), bodyParserJson, async function (request, response) {
     let idGenero = request.params.id
 

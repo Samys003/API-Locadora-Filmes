@@ -75,18 +75,21 @@ const getSelectGenresByIdMovies = async function (id_filme) {
     try {
 
         //criando o comando para ser utilizado no sql, selecionando todos os filmes pelo id em ordem decrescente
-        let sql = `select tbl_genero.id, tbl_genero.nome 
+        let sql = `select tbl_genero.id, tbl_genero.nome_genero 
         from tbl_filme
 
             inner join tbl_filme_genero
                 on tbl_filme.id = tbl_filme_genero.id_filme
             inner join tbl_genero
-                on tbl genero.id = tbl_filme_genero.id_genero
+                on tbl_genero.id = tbl_filme_genero.id_genero
 
-            where tbl_filme.id id=${id_filme}`
+            where tbl_filme.id=${id_filme}`
+
 
         //encaminha para o bd o script sql
         let result = await prisma.$queryRawUnsafe(sql)
+        
+      
 
 
         if (Array.isArray(result))

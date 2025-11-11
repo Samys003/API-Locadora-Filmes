@@ -41,6 +41,7 @@ const listarFilmes = async function () {
                 MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
                 MESSAGES.DEFAULT_HEADER.itens.filmes = resultFilmes
 
+                
                 return MESSAGES.DEFAULT_HEADER //200
             } else {
                 return MESSAGES.ERROR_NOT_FOUND //404
@@ -113,16 +114,34 @@ const inserirFilme = async function (filme, contentType) {
                         //processar a inserção dos dados na tabela de relação
                         // entre filme e genero
 
-                        filme.genero.forEach(async function(genero){
+                        //filme.genero.forEach(async function(genero){
+                        for(genero of filme.genero){
+                            // cria o json com o id do filme e o id do genero
                             let filmeGenero = {id_filme: lastId, id_genero: genero.id}
-                            let resultFilmesGeneros = await controllerFilmeGenero.inserirFilmeGenero(filmeGenero)
-                        });
+
+                            // encaminha o json com o id do filme e do genero para a controller filmeGenero
+                            let resultFilmesGeneros = await controllerFilmeGenero.inserirFilmeGenero(filmeGenero, contentType)
+                            
+
+                            if(resultFilmesGeneros.status_code != 201){
+                                return MESSAGES.ERROR_RELATIONAL_INSERTION // 500 Problema na tabela de relação
+                            }
+                        }
 
                         filme.id = lastId
 
                     MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCESS_CREATED_ITEM.status
                     MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCESS_CREATED_ITEM.status_code
                     MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCESS_CREATED_ITEM.message
+
+                    delete filme.genero
+
+                    let resultDadosGeneros = await controllerFilmeGenero.listarGenerosIdFilme(lastId)
+                    filme.genero = resultDadosGeneros.itens.filmes_generos
+                    
+                    
+
+                    MESSAGES.DEFAULT_HEADER.items  = filme
 
                     return MESSAGES.DEFAULT_HEADER // 201
                     
@@ -141,6 +160,7 @@ const inserirFilme = async function (filme, contentType) {
         }
 
     } catch (error) {
+        console.log(error)
         return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 
