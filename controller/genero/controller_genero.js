@@ -150,8 +150,8 @@ const atualizarGenero = async function (genero, id, contentType) {
 
         let validar = await validarDadosGenero(genero)
 
-                                            //garante que o contentType seja no formato APLLICATION/JSON
-        if (String(contentType).toUpperCase() == 'APLLICATION/JSON'){
+                                            //garante que o contentType seja no formato APPLICATION/JSON
+        if (String(contentType).toUpperCase() == 'APPLICATION/JSON'){
 
             if(!validar){
                 
@@ -163,11 +163,12 @@ const atualizarGenero = async function (genero, id, contentType) {
 
                     let resultGeneros = await generoDAO.setUpdatedGenner(genero)
 
+                    console.log(resultGeneros)
                     if(resultGeneros){
                         MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCESS_UPDATED_ITEM.status
                         MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCESS_UPDATED_ITEM.status_code
                         MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCESS_UPDATED_ITEM.message
-                        MESSAGES.DEFAULT_HEADER.items.genero = genero 
+                        MESSAGES.DEFAULT_HEADER.itens.genero = genero 
 
                         return MESSAGES.DEFAULT_HEADER
                     } else {
@@ -190,10 +191,47 @@ const atualizarGenero = async function (genero, id, contentType) {
 
 }
 
+const deletarGenero = async function (id) {
+     
+        let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
+    
+        try {
+    
+            if (!isNaN(id) && id != '' && id != null && id > 0) {
+                let resultGenero = await generoDAO.deleteGenrrer(Number(id))
+    
+                if (resultGenero) {
+                    if (resultGenero.length > 0) {
+                        MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
+                        MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
+                        MESSAGES.DEFAULT_HEADER.itens.genero = resultGenero
+    
+                        return MESSAGES.DEFAULT_HEADER //200
+    
+                    } else {
+                        return MESSAGES.SUCCESS_REQUEST //404
+                    }
+                } else {
+                    return MESSAGES.ERROR_INTERNAL_SERVER_MODEL // 500
+                }
+    
+            } else {
+                MESSAGES.ERROR_REQUIRED_FIELDS.message += '[ID INCORRETO]'
+                return MESSAGES.ERROR_REQUIRED_FIELDS //400
+            }
+    
+        } catch (error) {
+            return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER // 500
+        }
+}
+
+
+
 
 module.exports = {
     listarGeneros,
     buscarGeneroId,
     inserirGenero,
-    atualizarGenero
+    atualizarGenero,
+    deletarGenero
 }

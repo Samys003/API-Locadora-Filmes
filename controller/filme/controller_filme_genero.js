@@ -212,7 +212,7 @@ const inserirFilmeGenero = async function (filmeGenero, contentType) {
 }
 
 //Atualizar filme buscando pelo ID
-const atualizarFilme = async function (filmeGenero, idfilme, contentType) {
+const atualizarFilmeGenero = async function (filmeGenero, idfilme, contentType) {
 
 
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
@@ -332,7 +332,7 @@ module.exports = {
     listarFilmesGeneros,
     buscarFilmeGeneroId,
     inserirFilmeGenero,
-    atualizarFilme,
+    atualizarFilmeGenero,
     excluirFilmeGenero,
     validarDadosFilmeGeneros,
     listarFilmesIdGenero,

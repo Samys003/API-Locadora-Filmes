@@ -37,20 +37,33 @@ const listarFilmes = async function () {
         if (resultFilmes) {
             if (resultFilmes.length > 0) {
 
+                //processamento para adicionar os generos aos filmes 
+                for(filme of resultFilmes){
+
+                    let resultGeneros = await controllerFilmeGenero.listarGenerosIdFilme(filme.id)
+
+                    if(resultGeneros.status_code == 200)
+                    filme.genero = resultGeneros.itens.filmes_generos 
+
+                    
+                }
+
                 MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
                 MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
                 MESSAGES.DEFAULT_HEADER.itens.filmes = resultFilmes
 
-                
+
                 return MESSAGES.DEFAULT_HEADER //200
             } else {
                 return MESSAGES.ERROR_NOT_FOUND //404
             }
         } else {
             return MESSAGES.ERROR_INTERNAL_SERVER_MODEL //500
+            
         }
 
     } catch (error) {
+        console.log(error)
         return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER // 500 
     }
 
@@ -68,6 +81,19 @@ const buscarFilmeId = async function (id) {
 
             if (resultFilmes) {
                 if (resultFilmes.length > 0) {
+
+                    
+                    for(filme of resultFilmes){
+
+                        let resultGeneros = await controllerFilmeGenero.listarGenerosIdFilme(filme.id)
+
+                       
+                        if(resultGeneros.status_code == 200)
+                           
+                            filme.genero = resultGeneros.itens.filmes_generos
+                        
+                    }
+
                     MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCCESS_REQUEST.status
                     MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCCESS_REQUEST.status_code
                     MESSAGES.DEFAULT_HEADER.itens.filme = resultFilmes
@@ -122,25 +148,31 @@ const inserirFilme = async function (filme, contentType) {
                             // encaminha o json com o id do filme e do genero para a controller filmeGenero
                             let resultFilmesGeneros = await controllerFilmeGenero.inserirFilmeGenero(filmeGenero, contentType)
                             
-
+                            
                             if(resultFilmesGeneros.status_code != 201){
                                 return MESSAGES.ERROR_RELATIONAL_INSERTION // 500 Problema na tabela de relação
                             }
                         }
 
+                    
+                        //Adiciona o ID no JSON com os dados do filme 
                         filme.id = lastId
 
                     MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCESS_CREATED_ITEM.status
                     MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCESS_CREATED_ITEM.status_code
                     MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCESS_CREATED_ITEM.message
 
+                    //Adicionar no JSON dados do GENERO
+                    //apaga o atributo genero apenas com os ids que foram enviadas no post
                     delete filme.genero
 
+                     //Pesquisa no BD todos os generos que foram associados ao filme 
                     let resultDadosGeneros = await controllerFilmeGenero.listarGenerosIdFilme(lastId)
+
+                    //Cria novamente o atributo genero e coloca o resultado do BD com os generos
                     filme.genero = resultDadosGeneros.itens.filmes_generos
                     
                     
-
                     MESSAGES.DEFAULT_HEADER.items  = filme
 
                     return MESSAGES.DEFAULT_HEADER // 201
@@ -192,10 +224,32 @@ const atualizarFilme = async function (filme, id, contentType) {
                     let resultFilmes = await filmeDAO.setUpdateMovies(filme)
 
                     if (resultFilmes) {
+
+                        for(genero of filme.genero){
+                            // cria o json com o id do filme e o id do genero
+                            let filmeGenero = {id_filme: lastId, id_genero: genero.id}
+
+                            // encaminha o json com o id do filme e do genero para a controller filmeGenero
+                            let resultFilmesGeneros = await controllerFilmeGenero.atualizarFilmeGenero(filmeGenero, contentType)
+                            
+                            
+                            if(resultFilmesGeneros.status_code != 201){
+                                return MESSAGES.ERROR_RELATIONAL_INSERTION // 500 Problema na tabela de relação
+                            }
+                        }
+                        
+                        filme.id = resultFilmes
+
                         MESSAGES.DEFAULT_HEADER.status = MESSAGES.SUCESS_UPDATED_ITEM.status
                         MESSAGES.DEFAULT_HEADER.status_code = MESSAGES.SUCESS_UPDATED_ITEM.status_code
                         MESSAGES.DEFAULT_HEADER.message = MESSAGES.SUCESS_UPDATED_ITEM.message
-                        MESSAGES.DEFAULT_HEADER.itens.filme = filme
+                        
+                        delete filme.genero
+
+                        let resultDadosGeneros = await controllerFilmeGenero.listarGenerosIdFilme(resultFilmes)
+
+                        filme.genero = resultDadosGeneros.itens.filmes_generos
+
 
                         return MESSAGES.DEFAULT_HEADER // 200
 
@@ -227,7 +281,7 @@ const atualizarFilme = async function (filme, id, contentType) {
 
 //exclui um filme buscando pelo ID
 const excluirFilme = async function (id) {
-    console.log(id)
+    
     let MESSAGES = JSON.parse(JSON.stringify(DEFAULT_MESSAGES))
 
     try {

@@ -96,10 +96,10 @@ const setUpdatedGenner = async function (genero) {
         let sql = `update tbl_genero set 
                                     nome_genero          =  '${genero.nome_genero}'
                                     
-                                    where id = ${genero.nome_genero}`
+                                    where id = ${genero.id}`
 
         let result = await prisma.$executeRawUnsafe(sql)
-
+        
         if (result)
             return true
         else
@@ -110,6 +110,24 @@ const setUpdatedGenner = async function (genero) {
 
 }
 
+const deleteGenrrer = async function (id) {
+    try{
+
+        let sql =`delete from tbl_genero where id=${id}`
+
+        let result = await prisma.$executeRawUnsafe(sql)   
+        
+        if (result)
+            return true
+        else
+            return false
+
+    }catch(error){
+        return false
+    }
+    
+}
+
 
 module.exports = {
     getSelectAllGenrres,
@@ -117,6 +135,6 @@ module.exports = {
     setInsertGenrrers,
     getSelectLastId,
     setUpdatedGenner,
-    
+    deleteGenrrer
 
 }

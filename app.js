@@ -157,14 +157,14 @@ app.post('/v1/locadora/genero', cors(), bodyParserJson, async function (request,
 
     let genero = await controllerGenero.inserirGenero(dadosBody, contentType)
 
-    console.log(genero)
+
     response.status(genero.status_code)
     response.json(genero)
     
 })
 
 
-
+//atualizar genero
 app.put('/v1/locadora/genero/:id' , cors(), bodyParserJson, async function (request, response) {
     let idGenero = request.params.id
 
@@ -172,14 +172,25 @@ app.put('/v1/locadora/genero/:id' , cors(), bodyParserJson, async function (requ
 
     let contentType = request.headers['content-type']
 
+  
     let genero = await controllerGenero.atualizarGenero(dadosBody, idGenero, contentType)
-
-    response.status(genero.status_code)
+   
+   
+    response.status(genero.status_code)  
     response.json(genero)
 
 })
 
+app.delete('/v1/locadora/genero/:id', cors(), async function (request, response) {
 
+    let idGenero = request.params.id
+
+    
+    let genero = await controllerGenero.deletarGenero(idGenero)
+
+    response.status(genero.status_code)
+    response.json(genero)
+})
 
 app.listen(PORT, function(){
     console.log('API aguardando requisições... http://localhost:8080/v1/locadora/filme')
