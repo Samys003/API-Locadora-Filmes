@@ -223,6 +223,7 @@ const atualizarFilmeGenero = async function (filmeGenero, idfilme, contentType) 
         let validar = await validarDadosFilmeGeneros(filmeGenero)
 
         if (String(contentType).toUpperCase() == 'APPLICATION/JSON') {
+            
 
             if (!validar) {
 
@@ -264,6 +265,7 @@ const atualizarFilmeGenero = async function (filmeGenero, idfilme, contentType) 
         }
 
     } catch (error) {
+        console.log(error)
         return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 

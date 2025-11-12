@@ -227,7 +227,7 @@ const atualizarFilme = async function (filme, id, contentType) {
 
                         for(genero of filme.genero){
                             // cria o json com o id do filme e o id do genero
-                            let filmeGenero = {id_filme: lastId, id_genero: genero.id}
+                            let filmeGenero = {id_filme: filme.id, id_genero: genero.id}
 
                             // encaminha o json com o id do filme e do genero para a controller filmeGenero
                             let resultFilmesGeneros = await controllerFilmeGenero.atualizarFilmeGenero(filmeGenero, contentType)
@@ -273,6 +273,7 @@ const atualizarFilme = async function (filme, id, contentType) {
         }
 
     } catch (error) {
+        console.log(error)
         return MESSAGES.ERROR_INTERNAL_SERVER_CONTROLLER //500
     }
 
